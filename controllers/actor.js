@@ -85,11 +85,12 @@ exports.removeActor = async (req, res) => {
 };
 
 exports.searchActor = async (req, res) => {
-  const { query } = req;
+  const { name } = req.query;
 
   //const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
 
-  const result = await Actor.find({name: {$regex: query.name, $options: 'i'}, });
+  if(!name.trim()) return sendError(res, 'Invalid request')
+  const result = await Actor.find({name: {$regex: name, $options: 'i'}, });
   
   const actors = result.map((actor) => formatActor(actor));
 
@@ -111,7 +112,7 @@ exports.getSingleActor = async (req, res) => {
 
   const actor = await Actor.findById(id);
   if (!actor) return sendError(res, "Invalid request, actor not found!", 404);
-  res.json(formatActor(actor));
+  res.json({actor: formatActor(actor)} );
 };
 
 
@@ -123,7 +124,7 @@ exports.getActors = async(req, res) => {
   .skip(parseInt(pageNo) * parseInt(limit))
   .limit(parseInt(limit))
 
-  const profiles = actors.map(actor => formatActor(actors))
+  const profiles = actors.map((actor) => formatActor(actor))
   res.json({
     profiles,
   })

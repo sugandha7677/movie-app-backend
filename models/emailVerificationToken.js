@@ -11,7 +11,7 @@ const emailVerificationTokenSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  createAt: {
+  createdAt: {
     type: Date,
     expires: 3600,
     default: Date.now(),

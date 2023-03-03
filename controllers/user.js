@@ -54,7 +54,7 @@ exports.create = async (req, res) => {
 exports.verifyEmail = async (req, res) => {
   const { userId, OTP } = req.body;
 
-  if (!isValidObjectId(userId)) return res.json({ error: "Invalid user!" });
+  if (!isValidObjectId(userId)) return sendError( res ,  "Invalid user!" );
 
   const user = await User.findById(userId);
   if (!user) return sendError(res, "user not found!", 404);
@@ -212,7 +212,7 @@ exports.resetPassword = async (req, res) => {
   });
 };
 
-exports.signIn = async (req, res, next) => {
+exports.signIn = async (req, res ) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
